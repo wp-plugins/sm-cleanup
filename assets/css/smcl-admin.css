@@ -1,0 +1,40 @@
+#smcl-editor-css{
+	background-color: #333!important;
+    box-shadow: inset 3px 3px 5px rgba(255,255,255,0.5)!important;
+    color: #fff!important;
+}
+#smclean-box .sm-block{
+	display: block;
+	margin-bottom: 10px;
+}
+
+#smcl-optimize{
+	width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 16px;
+    display: block;
+    line-height: 36px;
+    height: 36px;	
+}
+
+#smcl-box .form-table th {
+    padding: 15px 10px 20px 0;
+}
+
+.sm-danger{
+    color: #fff;
+    background-color: #c9302c!important;
+    border-color: #ac2925!important;
+}
+.sm-warning{
+    color: #fff;
+    background-color: #f0ad4e!important;
+    border-color: #eea236!important;
+}
+
+.sm-success{
+    color: #fff;
+    background-color: #5cb85c!important;
+    border-color: #4cae4c!important;
+}
