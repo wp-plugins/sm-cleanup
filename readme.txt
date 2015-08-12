@@ -17,9 +17,10 @@ A simple way optimize your web, clean your site from code, don't need knowledge 
 
 * Do you often use custom your style by toolbar of wp_editor ?
 * Are you working with plugin WP Edit or Ultimate TinyMCE ?
-* INLINE VS INTERNAL VS EXTERNAL STYLE ?
-* Why External style? Is External style the best option for you ?
-=> If you want compress styles attribute, this is a simple tool for you! ;)
+* INLINE VS INTERNAL VS EXTERNAL STYLE ? Is External style the best option for you ?
+
+->If you want compress styles attribute and use as external style, this is a simple tool for you! ;)
+
 
 = Major features in SM Cleanup include: =
 
