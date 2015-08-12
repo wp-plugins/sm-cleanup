@@ -30,5 +30,6 @@ Major features in SM Cleanup include:
 3. Goto SM CLeanup and config your Options, then go to edit/addnew and ---- and ------ and -------- You're done! -> TRY use SM Cleanup now, thanks :))
 
 == Screenshots ==
+
 1.Compress your code
 2.List option
