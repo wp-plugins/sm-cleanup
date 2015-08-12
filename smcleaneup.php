@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: SM Cleanup
- * Plugin URI: #
+ * Plugin URI: https://wordpress.org/plugins/sm-cleanup
  * Version: 1.0
  * Author: Simon Jan
  * Author URI: https://profiles.wordpress.org/simonjan

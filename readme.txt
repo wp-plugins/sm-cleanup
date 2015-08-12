@@ -27,7 +27,7 @@ Major features in SM Cleanup include:
 
 1. Upload SM Cleanup plugin to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Goto SM CLeanup and config your Options, then go to edit/addnew and ---- and ------ and -------- You're done! -> TRY use SM Cleaner now, thanks :))
+3. Goto SM CLeanup and config your Options, then go to edit/addnew and ---- and ------ and -------- You're done! -> TRY use SM Cleanup now, thanks :))
 
 == Screenshots ==
 1.Compress your code
