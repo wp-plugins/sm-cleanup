@@ -30,6 +30,5 @@ Major features in SM Cleanup include:
 3. Goto SM CLeanup and config your Options, then go to edit/addnew and ---- and ------ and -------- You're done! -> TRY use SM Cleaner now, thanks :))
 
 == Screenshots ==
-
-You can see demo compress code by SM Cleanup from screenshort origin.png-> compress.png ->bestcompress.png
-And compress_analysis.png. They stay at my assets folder "/assets/file"
+1.Compress your code
+2.List option
