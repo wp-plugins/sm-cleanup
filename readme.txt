@@ -14,7 +14,7 @@ A simple way optimize your web, clean your site from code, don't need knowledge 
 * Do you often use custom your style by toolbar of wp_editor ?
 * Are you working with plugin WP Edit or Ultimate TinyMCE ?
 * INLINE VS INTERNAL VS EXTERNAL STYLE ?
-* Why External style? Is External style the best option for you?
+* Why External style? Is External style the best option for you ?                                                                
 => If you want use external style for your post, this is a simple tool for you! ;)
 
 Automatically convert style attributes to class attributes, use external style with minify instead of inline style, this  improves the load time of your page. You can choose more options (example remove blank or not, auto generate file or copy css to your file, change prefix of class name or etc,...).
