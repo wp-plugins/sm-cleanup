@@ -36,6 +36,9 @@ A simple way optimize your web, clean your site from code, don't need knowledge 
 == Screenshots ==
 1. Detail how to SM Cleanup compress your code
 2. List option
+3. Before use SM Cleanup compress (origin)
+4. After use SM Cleanup compress
+5. New post reuse these style
 
 == Changelog ==
 = 1.1 =
