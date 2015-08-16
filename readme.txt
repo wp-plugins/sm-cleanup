@@ -40,5 +40,5 @@ A simple way optimize your web, clean your site from code, don't need knowledge 
 == Changelog ==
 = 1.1 =
 * Update unique prefix class
-* Update remove class is not necessary, ex:&lt;p class=\"text-right color-f00 text-left\"> => now: &lt;p class=\"color-f00 text-left\">
+* Update remove class is not necessary, ex:&lt;p class="text-right color-f00 text-left"> => now: &lt;p class="color-f00 text-left">
 * Added table compress size report
