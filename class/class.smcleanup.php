@@ -47,8 +47,8 @@ if(! class_exists('SMCLeanup')){
 	   		}
 	   		$file = SMCL_PLUGIN_DIR . "assets/css/smcl-post.css";
 	   		if( !file_exists( $file ) ){
-	   			self::$_smclOP = get_option( '_smcl-options' );
-    			$opstyle = get_option( '_smcl-opsmcl' );
+	   			self::$_smclOP = $this->smGetOption( 'options' );
+    			$opstyle = $this->smGetOption( 'opsmcl' );
 	   			$important = isset( self::$_smclOP['post']['important'] ) && self::$_smclOP['post']['important'] == 1;
     			$styles = $this->smAddImpo( $opstyle, $important );
 	    		file_put_contents( $file, $styles);
@@ -93,7 +93,7 @@ if(! class_exists('SMCLeanup')){
 	    					}
 	    					break;
 	    				case 'prefix':
-	    					$ip = (array)$ip;
+	    					$ip = array_diff( $ip );
 	    					foreach( $ip as $i => $m ){
 	    						$new_input['post'][$k][$i] = sanitize_title( $m );
 	    					}
@@ -123,7 +123,7 @@ if(! class_exists('SMCLeanup')){
 	    }
 
 		public function smEnqueuePublicScript(){
-			self::$_smclOP = get_option( '_smcl-options' );
+			self::$_smclOP = $this->smGetOption( 'options' );
 			$pot = self::$_smclOP['post'];
 		   	$auto = 1;
 		   	if( isset( $pot['copy'] ) ){
@@ -140,27 +140,23 @@ if(! class_exists('SMCLeanup')){
 	    	if( $this->smIsEditPost()){
 	    		global $post;
 	    		wp_enqueue_script("smcl-post", SMCL_PLUGIN_ASSETS ."js/smcl-post.min.js",array(),false,true);
-	    		self::$_smclOP = get_option( '_smcl-options' );
+	    		self::$_smclOP = $this->smGetOption( 'options' );
 	    		$edit_margin = 1;
 	    		$list_exclude = array( 'EM','DEL','STRONG' );
 	    		$list_include = array();
-	    		$empty = 0;
 	    		$text = 'left';
-	    		if( $this->smGetMeta( $post->ID, 'empty' ) ){
-	    			$empty = 1;
-	    		}
 	    		$class_name = array(
 	    			'color'=>'color-',
 	    			'align' =>'text-',
-	    			'transform' =>'text-',
+	    			'transform' =>'txt-',
 	    			'padding'=>'pd-left-',
-	    			'decoration' => 'text-',
+	    			'decoration' => 'u-',
 	    			'top' => 'top-',
 	    			'family'=> 'family-',
 	    			'size' => 'size-'
 	    		);
 	    		$sm_margin = "{'P': 10, 'H1':30, 'H2' : 25, 'H3':20, 'H4':15, 'H5':5}";
-	    		$pot = self::$_smclOP['post'];
+	    		$pot = isset( self::$_smclOP['post'] ) ?  self::$_smclOP['post'] : '';
 	    		if( isset( $pot['margin'] ) ){
 	    			$sm_margin = $pot['margin'];
 	    		}
@@ -187,7 +183,6 @@ if(! class_exists('SMCLeanup')){
 	    			'list_include' => $list_include,
 	    			'sm_margin' => $sm_margin,
 	    			'class_name' => $class_name,
-	    			'empty' => $empty,
 	    			'text' => $text
 	    		);
 	    		wp_localize_script( 'smcl-post', '_SMCLSetting_', $obj );
@@ -203,6 +198,7 @@ if(! class_exists('SMCLeanup')){
 	    	$post_id = intval( $_POST['post'] );
 	    	$content = $_POST['content'];
 	    	if( current_user_can('edit_posts', $post_id) ){
+	    		$this->smUpdateOrigin( $post_id, $content );
 	    		$post_args = array(
 	    			'ID' => $post_id,
 	    			'post_content' => $content
@@ -210,8 +206,23 @@ if(! class_exists('SMCLeanup')){
 	    		$post_id = wp_update_post( $post_args );
 	    		echo $post_id;
 	    	}
-
 	    	wp_die();
+	    }
+
+	    public function smUpdateOrigin( $id, $content, $op = null ){
+	    	if( $this->smGetMeta( $id, 'origin' ) ){
+	    		return;
+	    	}
+	    	if( $op == null ){
+	    		$op = $this->smGetOption( 'options ');
+	    	}
+			$compress = $this->smContentSize( get_post_field( 'post_content', $id, 'edit') );
+			$this->smUpdateMeta( $id, 'origin', $compress );
+			$post_type = get_post_type( $id );
+			if( $post_type ){
+				$op['data']['post_type'] = isset( $op['data']['post_type'] ) ? wp_parse_args( array( $post_type ), (array)$op['data']['post_type'] ) : array( $post_type );
+			}
+			return $this->smUpdateOption( 'options', $op, 'no' );
 	    }
 
 	    public function smUpdateEmpty(){
@@ -221,10 +232,6 @@ if(! class_exists('SMCLeanup')){
 	    		wp_die( 'Insufficient privileges!' );
 	    	}
 	    	$post_id = intval( $_POST['post'] );
-	    	if( current_user_can('edit_posts', $post_id) ){
-	    		$empty = $this->smUpdateMeta($post_id, 'empty', 0);
-	    		echo $empty;
-	    	}
 	    	wp_die();
 	    }
 
@@ -240,24 +247,30 @@ if(! class_exists('SMCLeanup')){
 	    		$clas = $_POST['clas'];
 	    	}
 	    	if( current_user_can('edit_posts', $post_id) ){
-	    		self::$_smclOP = get_option('_smcl-options');
+	    		self::$_smclOP = $this->smGetOption('options');
+
 	    		if( isset( self::$_smclOP['post']['auto'] ) && self::$_smclOP['post']['auto'] == 1 ){
 	    			$content = $_POST['content'];
+	    			$this->smUpdateOrigin( self::$_smclOP, $post_id, $content );
 		    		$post_args = array(
 		    			'ID' => $post_id,
 		    			'post_content' => $content
 		    		);
 		    		$post_id = wp_update_post( $post_args );
 	    		}
-	    		$important = isset( self::$_smclOP['post']['important'] ) && self::$_smclOP['post']['important'] == 1;
-	    		$opsmcl = $this->smUpdateSMCL( $clas, $important );
-	    		if( $opsmcl ){
-	    			$file = file_put_contents( SMCL_PLUGIN_DIR .'assets/css/smcl-post.css', $opsmcl );
-	    			if( $file ){
-	    				echo 'updated';
-	    			}else{
-	    				echo 'errors';
-	    			}
+	    		if( !empty( $clas ) ){
+	    			$important = isset( self::$_smclOP['post']['important'] ) && self::$_smclOP['post']['important'] == 1;
+	    			$opsmcl = $this->smUpdateSMCL( $post_id, $clas, $important );
+	    			if( $opsmcl ){
+		    			$file = file_put_contents( SMCL_PLUGIN_DIR .'assets/css/smcl-post.css', $opsmcl );
+		    			if( $file ){
+		    				echo 'updated';
+		    			}else{
+		    				echo 'errors';
+		    			}
+		    		}else{
+		    			echo true;
+		    		}
 	    		}else{
 	    			echo true;
 	    		}
@@ -281,10 +294,23 @@ if(! class_exists('SMCLeanup')){
 			}
 	    }
 
-	    public function smUpdateSMCL( $val, $important ){
-	    	$opsmcl = get_option( '_smcl-opsmcl' );
-    		$opsmcl = wp_parse_args( $val, $opsmcl );
-    		if( update_option( '_smcl-opsmcl', $opsmcl, 'no' ) ){
+	    public function smUpdateSMCL( $id, $val, $important ){
+	    	$opsmcl = $this->smGetOption( 'opsmcl' );
+	    	// new style for post
+	    	if( empty( $opsmcl ) ){
+	    		$opsmcl = $newstyle = $val;
+	    	}else{
+	    		$newstyle = array_diff_key( (array)$val, (array)$opsmcl );
+	    		$opsmcl = wp_parse_args( $val, $opsmcl );
+	    	}
+	    	$style = $this->smGetMeta( $id, 'newstyle' );
+	    	if( $style ){
+	    		$newstyle = wp_parse_args( $newstyle, (array)$style );
+	    	}
+    		if( !empty( $newstyle ) && $newstyle != [""] ){
+    			$this->smUpdateMeta( $id, 'newstyle', $newstyle );
+    		}
+    		if( $this->smUpdateOption('opsmcl', $opsmcl, 'no' ) ){
     			return $this->smAddImpo( $opsmcl, $important );
     		}
     		return false;
@@ -305,10 +331,24 @@ if(! class_exists('SMCLeanup')){
 	    	return delete_post_meta( $post_id, $key );
 	    }
 
+	    public function smUpdateOption( $key, $val, $auto='yes' ){
+	    	$key = "_smcl-{$key}";
+	    	return update_option( $key, $val, $auto );
+	    }
+
+	    public function smGetOption( $key ){
+	    	$key = "_smcl-{$key}";
+	    	return get_option( $key );
+	    }	    
+
 	    public function smAddImpo( $objstyle, $important ){
+	    	if(empty( $objstyle ))
+	    		return;
 	    	$styles = '';
-			foreach( $objstyle as $cl=> $val ){
-    			$styles .= ".{$cl}\{{$val}\}";
+			foreach( (array)$objstyle as $cl=> $val ){
+				if( !empty( $val )){
+					$styles .= ".{$cl}\{{$val}\}";
+				}
     		}
     		if( $important ){
     			$styles = str_replace( '!important', '', $style );
@@ -318,22 +358,43 @@ if(! class_exists('SMCLeanup')){
 	    }
 
 	    public function smCleanMetaboxFunc($post){
-	    	self::$_smclOP = get_option('_smcl-options');
+	    	self::$_smclOP = $this->smGetOption('options');
 	    	$post_id = $post->ID;
-	    	$empty = $this->smGetMeta($post_id, 'empty');
 	    	$top = 'top-';
     		if( isset( self::$_smclOP['post']['prefix']['top'])){
     			$top = self::$_smclOP['post']['prefix']['top'];
     		}
+    		$origin = $this->smGetMeta( $post_id, 'origin' );
+    		$newstyle =$this->smGetMeta( $post_id, 'newstyle' );
+    		$important = isset( self::$_smclOP['post']['important'] ) && self::$_smclOP['post']['important'] == 1;
+    		$newstyle = esc_attr( $this->smAddImpo( $newstyle, $important ) );
 	    	?>
 	    	<div class="smcl-metabox">
-	    		<p <?php if( !$empty ){echo 'class="hidden"';}?>>
-	    			<label class="sm-block">
-		        		<input type="checkbox" <?php if( $empty ){echo 'checked';}?> id="smcl-empty" name="smcl-empty" value="1" /> <?php _e('Keep my set margin','smcleanup');?><br/>
-		        		<span class="description"><?php _e("You have {$empty} block tag use margin top (with class name {$top}-*), so now we don't remove this class when you update your code, we only add new. Leave <strong style='color:#f00'>uncheck</strong> if you want overwrite it.","smcleanup");?></span>
-		        	</label>
-	    		</p>
+	    		<table id="smcl-result" class="hidden">
+	    			<caption><?php _e('Statement','smclean');?></caption>
+	    			<thead>
+	    				<tr>
+	    					<th><?php _e('Origin');?></th>
+	    					<th><?php _e('Compress');?></th>
+	    					<th><?php _e('Styles');?></th>
+	    					<th><?php _e('Saved without styles');?></th>
+	    					<th><?php _e('Saved');?></th>
+	    					<th><?php _e('Saved Later(for 10 post reuse these styles)');?></th>
+	    				</tr>
+	    			</thead>
+	    			<tbody>
+	    				<tr id="smcl-body-result">
+	    					<td><?php if( $origin ){echo $origin; }else{ echo $this->smContentSize( $post->post_content ); } ?> Bytes</td>
+	    					<td></td>
+	    					<td><?php echo $this->smContentSize( $newstyle );?></td>
+	    					<td></td>
+	    					<td></td>
+	    					<td></td>
+	    				</tr>
+	    			</tbody>
+	    		</table>
 	    		<a href="#" id="smcl-optimize" class="button button-primary"><?php _e('Save compress code to my post', 'smcleanup');?></a>
+	    		<p class="more-cleaner hidden">We need save to post to get cleaner code</p>
 	    	</div>
 	    	<h3>Compress code:</h3>
 	    	<?php
@@ -342,13 +403,25 @@ if(! class_exists('SMCLeanup')){
 				wp_editor( '', 'smcl-editor-post', array('editor_height'=>250, 'media_buttons'=>false, 'editor_css'=>'<style>#wp-smcl-editor-post-editor-container .mce-toolbar-grp,#wp-smcl-editor-post-editor-container .quicktags-toolbar{display:none!important}</style>') );
 	    	?>
 	    	<h3>New style</h3>
+	    		<textarea id="smcl-editor-css" name=""><?php echo $newstyle;?></textarea>
 	    	<?php
-	    		wp_editor( '', 'smcl-editor-css', array('media_buttons'=>false, 'dfw'=>true,'tinymce'=>false, 'quicktags'=>false, 'editor_height'=>200) );
 	    	}
 	    }
 
 	    public function smSetPrefix( $v ){
 	    	return $v.'-';
+	    }
+
+	    public function smContentSize( $content ){
+	    	if( gettype( $content )!='string'){
+	    		return 0;
+	    	}
+	    	if (function_exists('mb_strlen')) {
+			    $content = mb_strlen($content, '8bit');
+			} else {
+			    $content = strlen($content);
+			}
+			return intval( $content );
 	    }
 
 	    public function smRenderCleanup( $action, $slide = null ){
@@ -360,7 +433,7 @@ if(! class_exists('SMCLeanup')){
             		<?php
             			settings_fields( 'smcl-options' );
             			do_settings_sections( 'smcl-options' );
-            			self::$_smclOP = get_option('_smcl-options');
+            			self::$_smclOP = $this->smGetOption('options');
             			$empty = 1;
             			$copy = $important = $auto = 0;
             			$prefix = $margin = '';
@@ -373,13 +446,12 @@ if(! class_exists('SMCLeanup')){
             			$exclude = 'em, del, strong';
             			$align = 'text';
             			$padding = 'pd-left';
-            			$decoration = 'text';
-            			$transform = 'text';
+            			$decoration = 'u';
             			$color = 'color';
             			$family = 'family';
             			$size = 'size';
-            			$align = 'text';
-            			$transform = 'text';
+            			$align = 'align';
+            			$transform = 'txt';
             			$top = 'top';
             			$text = 'left';
 				    	if(isset(  self::$_smclOP['post'] ) && !empty( self::$_smclOP['post']) ){
@@ -393,15 +465,59 @@ if(! class_exists('SMCLeanup')){
 				    		}
 				    	}
 				    	$file = SMCL_PLUGIN_DIR . "assets/css/smcl-post.css";
+				    	$important = isset( $smPost['important'] ) && $smPost['important'] == 1;
 	   					if( file_exists( $file ) ){
 				    		$styles = file_get_contents( SMCL_PLUGIN_DIR.'assets/css/smcl-post.css' );
 				    	}else{
-				    		$opstyle = get_option( '_smcl-opsmcl' );
-				    		$important = isset( $smPost['important'] ) && $smPost['important'] == 1;
+				    		$opstyle = $this->smGetOption( 'opsmcl' );
     						$styles = $this->smAddImpo( $opstyle, $important );
+				    	}
+
+				    	// statement
+				    	$origin = $compress = $cp_styles = 0;
+			    		$args = array(
+				    		'posts_per_page' => -1,
+				    		'post_type' => self::$_smclOP['data']['post_type'],
+				    		'meta_query' => array(
+								array(
+									'key'     => '_smcl-meta-origin',
+									'value'   => 0,
+									'compare' => '>',
+								)
+							)
+				    	);
+				    	$p_comp = new WP_Query( $args );
+				    	if( $p_comp->have_posts() ){
+				    		foreach( $p_comp->posts as $p ){
+				    			$origin += $this->smGetMeta( $p->ID, 'origin' );
+				    			$compress += $this->smContentSize( $p->post_content );
+				    			$newstyle = $this->smAddImpo( $this->smGetMeta( $p->ID, 'newstyle' ), $important );
+				    			$cp_styles += $this->smContentSize( $newstyle );
+				    		}
 				    	}
 				    	
 				    ?>
+				    	<table id="smcl-result">
+			    			<caption><?php _e('Statement','smclean');?></caption>
+			    			<thead>
+			    				<tr>
+			    					<th><?php _e('Origin');?></th>
+			    					<th><?php _e('Compress');?></th>
+			    					<th><?php _e('Styles');?></th>
+			    					<th><?php _e('Saved without styles');?></th>
+			    					<th><?php _e('Saved');?></th>
+			    				</tr>
+			    			</thead>
+			    			<tbody>
+			    				<tr id="smcl-body-result">
+			    					<td><?php echo $origin; ?> Bytes</td>
+			    					<td><?php echo $compress;?> Bytes</td>
+			    					<td><?php echo $cp_styles;?> Bytes</td>
+			    					<td><?php echo ( $origin - $compress );?> Bytes</td>
+			    					<td><?php echo ( $origin - $compress - $cp_styles );?> Bytes</td>
+			    				</tr>
+			    			</tbody>
+			    		</table>
 					    <table class="form-table">
 					    	<tr>
 						        <th scope="row"><?php _e( 'Automatic update compress to post ?', 'smcleanup');?></th>
@@ -409,7 +525,7 @@ if(! class_exists('SMCLeanup')){
 						        	<label class="sm-block">
 						        		<input type="checkbox" <?php checked( $auto, 1 );?> name="_smcl-options[post][auto]" value="1" /> Yes
 						        	</label>
-						        	<p class="description">Automatic update compress code to post instead of update commpress to area SM Cleanup option.<br/><span style="color:#f00">** Make sure that you've understood this action, please leave uncheck and try demo if you want everything to be safe!</span></p>
+						        	<p class="description">Automatic update compress code to post instead of update compress to area SM Cleanup option.<br/><span style="color:#f00">** Make sure that you've understood this action, please leave uncheck and try demo if you want everything to be safe!</span></p>
 						        </td>
 					        </tr>
 					        <tr>
@@ -467,7 +583,7 @@ if(! class_exists('SMCLeanup')){
 						        </td>
 					        </tr>
 					        <tr>
-						        <th scope="row"><?php _e('List prefix class name','smcleanup');?>
+						        <th scope="row"><?php _e('List prefix class name (unique)','smcleanup');?>
 						        <p class="description"><?php _e('prefix-property ex: text-left, pd-left-30, ...','smcleanup');?>
 						        </p>
 						        </th>
