@@ -17,7 +17,8 @@ A simple way optimize your web, clean your site from code, don't need knowledge 
 
 * Do you often use custom your style by toolbar of wp_editor ?
 * Are you working with plugin WP Edit or Ultimate TinyMCE ?
-* [INLINE VS INTERNAL VS EXTERNAL STYLE?](https://vineetgupta22.wordpress.com/2011/07/09/inline-vs-internal-vs-external-css/) [Why should I use an External Stylesheet?](http://www.tomjepson.co.uk/why-should-i-use-an-external-stylesheet/)
+* [INLINE VS INTERNAL VS EXTERNAL STYLE?](https://vineetgupta22.wordpress.com/2011/07/09/inline-vs-internal-vs-external-css/)
+* [Why should I use an External Stylesheet?](http://www.tomjepson.co.uk/why-should-i-use-an-external-stylesheet/)
 
 ->If you want compress styles attribute and use as external style, this is a simple tool for you! ;)
 
