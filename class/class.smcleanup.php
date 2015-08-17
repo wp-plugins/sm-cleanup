@@ -475,9 +475,13 @@ if(! class_exists('SMCLeanup')){
 
 				    	// statement
 				    	$origin = $compress = $cp_styles = 0;
+			    		$post_type = array('post');
+				    	if( isset( self::$_smclOP['data']['post_type'] ) ){
+				    		$post_type = self::$_smclOP['data']['post_type'];
+				    	}
 			    		$args = array(
 				    		'posts_per_page' => -1,
-				    		'post_type' => self::$_smclOP['data']['post_type'],
+				    		'post_type' => $post_type,
 				    		'meta_query' => array(
 								array(
 									'key'     => '_smcl-meta-origin',
