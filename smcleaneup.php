@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SM Cleanup
  * Plugin URI: https://wordpress.org/plugins/sm-cleanup
- * Version: 1.1
+ * Version: 1.1.1
  * Author: Simon Jan
  * Author URI: https://profiles.wordpress.org/simonjan
  * Description: A simple way optimize your web, clean your from code, convert style attributes to class attributes, use css external css instead of inline style, reuse your style
