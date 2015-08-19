@@ -93,14 +93,19 @@ if(! class_exists('SMCLeanup')){
 	    					}
 	    					break;
 	    				case 'prefix':
-	    					$ip = array_diff( $ip );
-	    					foreach( $ip as $i => $m ){
-	    						$new_input['post'][$k][$i] = sanitize_title( $m );
+	    					$ips = array_unique( $ip );
+	    					if( count( $ips ) != count( $ip ) ){
+	    						self::$_smclOP = $this->smGetOption('options');
+	    						$ip = isset( self::$_smclOP['post']['prefix'] ) ? self::$_smclOP['post']['prefix'] : array();
+	    					}
+	    					if( !empty( $ip ) ){
+	    						foreach( $ip as $i => $m ){
+		    						$new_input['post'][$k][$i] = sanitize_html_class( $m );
+		    					}
 	    					}
 	    					break;
 	    				default:
 	    					$new_input['post'][$k] = sanitize_text_field( $ip );
-	    					break;
 	    			}
 	    		}
 	    	}
@@ -147,13 +152,16 @@ if(! class_exists('SMCLeanup')){
 	    		$text = 'left';
 	    		$class_name = array(
 	    			'color'=>'color-',
+	    			'bgk' => 'bg-',
 	    			'align' =>'text-',
 	    			'transform' =>'txt-',
 	    			'padding'=>'pd-left-',
 	    			'decoration' => 'u-',
 	    			'top' => 'top-',
 	    			'family'=> 'family-',
-	    			'size' => 'size-'
+	    			'size' => 'size-',
+	    			'height' => 'hei-',
+	    			'width' => 'wid-'
 	    		);
 	    		$sm_margin = "{'P': 10, 'H1':30, 'H2' : 25, 'H3':20, 'H4':15, 'H5':5}";
 	    		$pot = isset( self::$_smclOP['post'] ) ?  self::$_smclOP['post'] : '';
@@ -222,7 +230,7 @@ if(! class_exists('SMCLeanup')){
 			if( $post_type ){
 				$op['data']['post_type'] = isset( $op['data']['post_type'] ) ? wp_parse_args( array( $post_type ), (array)$op['data']['post_type'] ) : array( $post_type );
 			}
-			return $this->smUpdateOption( 'options', $op, 'no' );
+			return $this->smUpdateOption( 'options', $op );
 	    }
 
 	    public function smUpdateEmpty(){
@@ -310,7 +318,7 @@ if(! class_exists('SMCLeanup')){
     		if( !empty( $newstyle ) && $newstyle != [""] ){
     			$this->smUpdateMeta( $id, 'newstyle', $newstyle );
     		}
-    		if( $this->smUpdateOption('opsmcl', $opsmcl, 'no' ) ){
+    		if( $this->smUpdateOption('opsmcl', $opsmcl ) ){
     			return $this->smAddImpo( $opsmcl, $important );
     		}
     		return false;
@@ -331,9 +339,9 @@ if(! class_exists('SMCLeanup')){
 	    	return delete_post_meta( $post_id, $key );
 	    }
 
-	    public function smUpdateOption( $key, $val, $auto='yes' ){
+	    public function smUpdateOption( $key, $val ){
 	    	$key = "_smcl-{$key}";
-	    	return update_option( $key, $val, $auto );
+	    	return update_option( $key, $val );
 	    }
 
 	    public function smGetOption( $key ){
@@ -448,11 +456,14 @@ if(! class_exists('SMCLeanup')){
             			$padding = 'pd-left';
             			$decoration = 'u';
             			$color = 'color';
+            			$bgk = 'bg';
             			$family = 'family';
             			$size = 'size';
             			$align = 'align';
             			$transform = 'txt';
             			$top = 'top';
+            			$hei = 'hei';
+            			$wid = 'wid';
             			$text = 'left';
 				    	if(isset(  self::$_smclOP['post'] ) && !empty( self::$_smclOP['post']) ){
 				    		$smPost = self::$_smclOP['post'];
@@ -596,6 +607,9 @@ if(! class_exists('SMCLeanup')){
 						        		<input type="text" name="_smcl-options[post][prefix][color]" value="<?php echo esc_attr( $color );?>" /> <?php _e('for color','smcleanup');?>
 						        	</label>
 						        	<label class="sm-block">
+						        		<input type="text" name="_smcl-options[post][prefix][bgk]" value="<?php echo esc_attr( $bgk );?>" /> <?php _e('for background color','smcleanup');?>
+						        	</label>
+						        	<label class="sm-block">
 						        		<input type="text" name="_smcl-options[post][prefix][family]" value="<?php echo esc_attr( $family );?>" /> <?php _e('for font-family','smcleanup');?>
 						        	</label>
 						        	<label class="sm-block">
@@ -615,6 +629,12 @@ if(! class_exists('SMCLeanup')){
 						        	</label>
 						        	<label class="sm-block">
 						        		<input type="text" name="_smcl-options[post][prefix][top]" value="<?php echo esc_attr( $top );?>" /> <?php _e('for margin-top','smcleanup');?>
+						        	</label>
+						        	<label class="sm-block">
+						        		<input type="text" name="_smcl-options[post][prefix][hei]" value="<?php echo esc_attr( $hei );?>" /> <?php _e('for height','smcleanup');?>
+						        	</label>
+						        	<label class="sm-block">
+						        		<input type="text" name="_smcl-options[post][prefix][wid]" value="<?php echo esc_attr( $wid );?>" /> <?php _e('for width','smcleanup');?>
 						        	</label>
 						        </td>
 					        </tr>

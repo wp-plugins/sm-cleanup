@@ -42,6 +42,13 @@ A simple way optimize your web, clean your site from code, save bandwidth, don't
 5. New post reuse these style
 
 == Changelog ==
+= 1.1.1 =
+* Fixed remove text-align default (ltr/rtl)
+* Fixed color conflict with background-color
+* Added width, height, bakground-color
+* Fixed font-size units, accept: pt, px,em,rem,%; convert pt to px
+* Fixed padding, width, height units, accept: px,em,rem,%
+
 = 1.1 =
 * Update unique prefix class
 * Update remove class is not necessary, ex:&lt;p class="text-right color-f00 text-left"> => now: &lt;p class="color-f00 text-left">
