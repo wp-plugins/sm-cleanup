@@ -1,0 +1,1 @@
+{"color":"color","bgk":"bg","family":"family","size":"size","align":"align","padding":"pd-left","decoration":"u","transform":"txt","top":"top","hei":"hei","wid":"wid"}
