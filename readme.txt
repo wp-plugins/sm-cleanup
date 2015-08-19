@@ -1,14 +1,13 @@
 === SM Cleanup ===
 Contributors: Simon Jan
 Tags: compress minify css external style attributes minify optimize clean reuse code class SEO html css
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FVK9AZJVKK69C
 Requires at least: 3.4
 Tested up to: 4.2.4
 Stable tag: 1.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A simple way optimize your web, clean your site from code, save bandwidth, don't need knowledge on html and css, convert style attributes (font-size, font-family, colors, styles etc..) to class attributes, use external style instead of inline style, reuse your style, this  improves the load time of your page. Ex: inline style style="color:#ff0000" now is: external css file: .color-f00{color:#f00}, ...
+A simple way optimize your web, clean your site from code, save bandwidth, don't need knowledge on html and css, convert style attributes ....
 
 
 == Description ==
@@ -20,7 +19,7 @@ A simple way optimize your web, clean your site from code, save bandwidth, don't
 * [INLINE VS INTERNAL VS EXTERNAL STYLE?](https://vineetgupta22.wordpress.com/2011/07/09/inline-vs-internal-vs-external-css/)
 * [Why should I use an External Stylesheet?](http://www.tomjepson.co.uk/why-should-i-use-an-external-stylesheet/)
 
-->If you want compress styles attribute and use as external style, this is a simple tool for you! ;)
+->If you want compress styles attribute and use as external style, this is a simple tool for you, all of you need is click and see and click! ;)
 
 
 = Major features in SM Cleanup include: =
