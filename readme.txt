@@ -42,7 +42,7 @@ A simple way optimize your web, clean your site from code, save bandwidth, don't
 6. Added custom toolbar
 
 == Changelog ==
-= 1.4 =
+= 1.2 =
 * Fixed compress size report
 * Remove auto convert font-size pt to px
 * Added custom toolbar, included: Font-size, Font-family, mutiple Numbered list, Bulleted list, picker-color for background, Insert video, Insert date/time; Custom units of font-size, accept: px, pt, %, em, rem; Custom date time format
