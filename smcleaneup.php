@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SM Cleanup
  * Plugin URI: https://wordpress.org/plugins/sm-cleanup
- * Version: 1.1.1
+ * Version: 1.2
  * Author: Simon Jan
  * Author URI: https://profiles.wordpress.org/simonjan
  * Description: A simple way optimize your web, clean your from code, convert style attributes to class attributes, use css external css instead of inline style, reuse your style
@@ -14,9 +14,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'SMCL_V', '1.0' );
+define( 'SMCL_V', '1.2' );
 
-define( 'SMCL_RQ_WP_V', '4.0' );
+define( 'SMCL_RQ_WP_V', '3.4' );
 
 define( 'SMCL_PLUGIN', __FILE__ );
 
@@ -25,6 +25,8 @@ define( 'SMCL_PLUGIN_DIR', plugin_dir_path( ( SMCL_PLUGIN ) ) );
 define( 'SMCL_PLUGIN_URL', plugin_dir_url( SMCL_PLUGIN ) );
 
 define( 'SMCL_PLUGIN_ASSETS', SMCL_PLUGIN_URL . 'assets/');
+
+define( 'SMCL_PLUGIN_LIBS', SMCL_PLUGIN_URL . 'libs/');
 
 define( 'SMCL_ADMIN_URL', admin_url('admin.php?page=sm-cleanup') );
 

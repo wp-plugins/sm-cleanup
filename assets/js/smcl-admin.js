@@ -7,10 +7,15 @@
 			$('.smcl-more').on('click', 'input:radio', function(){
 				var $next = $(this).closest('tr').next('tr');
 				if( $(this).hasClass('show-more') ){
-					$next.fadeIn(600);
+					$next.stop().fadeIn(600);
 				}else{
-					$next.fadeOut(300);
+					$next.stop().fadeOut(300);
 				};
+			});
+			$('.smcl-collapse').on('click', function(e){
+				e.preventDefault();
+				var id = $(this).attr('data-parent');
+				$(id).slideToggle();
 			});
 		}
 	}

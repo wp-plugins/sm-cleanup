@@ -11,6 +11,19 @@
 	display: block;
 	margin-bottom: 10px;
 }
+#smclean-box input[type="text"] {
+    height: 36px;
+    background-color: #fff;
+}
+#smclean-box tr{
+    border-bottom: 1px solid #ddd;
+}
+#smclean-box h2{
+    border-left: 5px solid #09f;
+    padding-left: 15px;
+    height: 22px;
+    line-height: 16px;
+}
 
 #smcl-optimize{
 	width: 50%;
@@ -64,8 +77,32 @@
     padding:10px 0;
     border-right: 1px solid;
 }
-#smcl-result caption{
+.smcl-report caption{
     font-size: 15px;
     color:#09f;
+    font-weight: 700;
     margin-bottom: 10px;
+}
+#date-formats{
+    background-color: #fff;
+    border-collapse: collapse;
+    width:100%;
+    max-width: 600px;
+}
+#date-formats th{
+    width:30px;
+    padding-left: 10px;
+}
+#date-formats td{
+    padding:8px 10px;
+}
+
+#smclean-box .form-table .widefat th,#smclean-box .form-table .widefat td{
+    text-align: center;
+    display: table-cell;
+}
+#smclean-box .form-table .widefat input[type="text"]{
+    text-align: center;
+    box-shadow: none;
+    width: 100%;
 }

@@ -1,10 +1,9 @@
 === SM Cleanup ===
 Contributors: Simon Jan
 Tags: compress minify css external style attributes minify optimize clean reuse code class SEO html css
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FVK9AZJVKK69C
 Requires at least: 3.4
-Tested up to: 4.2.4
-Stable tag: 1.1.1
+Tested up to: 4.3
+Stable tag: 1.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,16 +39,11 @@ A simple way optimize your web, clean your site from code, save bandwidth, don't
 3. Before use SM Cleanup compress (origin)
 4. After use SM Cleanup compress
 5. New post reuse these style
+6. Added custom toolbar
 
 == Changelog ==
-= 1.1.1 =
-* Fixed remove text-align default (ltr/rtl)
-* Fixed color conflict with background-color
-* Added width, height, bakground-color
-* Fixed font-size units, accept: pt, px,em,rem,%; convert pt to px
-* Fixed padding, width, height units, accept: px,em,rem,%
-
-= 1.1 =
-* Update unique prefix class
-* Update remove class is not necessary, ex:&lt;p class="text-right color-f00 text-left"> => now: &lt;p class="color-f00 text-left">
-* Added table compress size report
+= 1.2 =
+* Fixed compress size report
+* Remove auto convert font-size pt to px
+* Added custom toolbar, included: Font-size, Font-family, mutiple Numbered list, Bulleted list, picker-color for background, Insert video, Insert date/time; Custom units of font-size, accept: px, pt, %, em, rem; Custom date time format
+* Added style for 'list-style-type'
